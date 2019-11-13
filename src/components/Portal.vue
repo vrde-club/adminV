@@ -3,6 +3,10 @@
     <h1>Vrde Ventas</h1>
     <div class="total" style="font-size:24px;font-weight:bold;">Total = {{total}}</div>
     <br><br>
+    {{salesTotalCount}}
+    <div class="count" v-for="item in count" v-bind:key="item['.key']">
+
+    </div>
     <div class="sale" v-for="sale in sales" v-bind:key="sale['.key']">
       <button class="redBtn" @click="removeSale(sale['.key'])">Remove</button>
       <div class="userData">
@@ -35,7 +39,8 @@ const salesRef = db.ref("sales");
 export default {
   data() {
     return {
-      sales: []
+      sales: [],
+      count: []
     };
   },
   firebase: {
@@ -88,6 +93,14 @@ export default {
         console.log(self[i][0]);
       }
       return t;
+    },
+    salesTotalCount: function () {
+      var self = this;
+      for (var i in self.sales) {
+        console.log(s[i]) 
+        self.count[self.sales[i].variedad] += self.sales[i].pago; 
+      }
+        console.log(self.count);  
     }
   }
 };
