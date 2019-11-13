@@ -1,12 +1,14 @@
 <template>
   <div id="portal">
     <h1>Vrde Ventas</h1>
-    <div class="total" style="font-size:24px;font-weight:bold;">Total = {{total}}</div>
-    <br><br>
-    {{salesTotalCount}}
-    <div class="count" v-for="item in count" v-bind:key="item['.key']">
-
+    <div class="count">
+      <div class="row" v-for="item in salesTotalCount" v-bind:key="item['.key']">
+        <div class="name">{{item.name}}</div>
+        <div class="amount">{{item.amount}}</div>
+      </div>
     </div>
+    <br />
+    <br />
     <div class="sale" v-for="sale in sales" v-bind:key="sale['.key']">
       <button class="redBtn" @click="removeSale(sale['.key'])">Remove</button>
       <div class="userData">
@@ -20,7 +22,7 @@
         <div class="line"></div>
         <div class="items">
           <div class="item" v-for="item  in sale[0].items" v-bind:key="item">
-            <div class="row name">Variedad : {{item.variedad}}</div>
+            <div class="row name">{{item.variedad}}</div>
             <div class="row amount">Cantidad : {{item.cantidad}}</div>
             <div class="row payment">Pago : {{item.pago}}</div>
             <div class="row price">Precio : {{item.precio}}</div>
@@ -85,22 +87,34 @@ export default {
     }
   },
   computed: {
-    total: function() {
-      var t = 0;
-      var self = this.sales;
-      for (var i in self) {
-        t += self[i][0].total;
-        console.log(self[i][0]);
-      }
-      return t;
-    },
-    salesTotalCount: function () {
+    salesTotalCount: function() {
       var self = this;
-      for (var i in self.sales) {
-        console.log(s[i]) 
-        self.count[self.sales[i].variedad] += self.sales[i].pago; 
+      var s = self.sales;
+      var c = {};
+      for (var i in s) {
+        var items = s[i][0].items;
+        for (var o in items) {
+          var name = items[o].variedad.toString();
+
+          if (!c[name] === NaN) {
+            c[name] = 0;
+          } else {
+            c[name] = parseInt(items[o].cantidad);
+          }
+        }
       }
-        console.log(self.count);  
+      var n = [];
+      for (var i in c) {
+        n.push({ name: i, amount: c[i] });
+      }
+      n.sort(function(a, b) {
+        var textA = a.name.toUpperCase();
+        var textB = b.name.toUpperCase();
+        return textA < textB ? -1 : textA > textB ? 1 : 0;
+      });
+
+      this.count = n;
+      return this.count;
     }
   }
 };
@@ -172,5 +186,20 @@ export default {
   position: absolute;
   right: 10px;
   top: 10px;
+}
+
+.count {
+}
+.count .row {
+  display: flex;
+  border-bottom: 0.5px solid #e2e2e2;
+  max-width: 180px;
+  margin-bottom: 7px;
+}
+.count .row .amount {
+}
+.count .row .name {
+  width: 180px;
+  text-align: left;
 }
 </style>
