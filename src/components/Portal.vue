@@ -1,6 +1,7 @@
 <template>
   <div id="portal">
-    <h1>Vrde Ventas</h1>
+    <h1>Ventas</h1>
+    <h1>Total : {{totalSales}}</h1>
     <div class="count">
       <div class="row" v-for="item in salesTotalCount" v-bind:key="item['.key']">
         <div class="name">{{item.name}}</div>
@@ -11,21 +12,103 @@
     <br />
     <div class="sale" v-for="sale in sales" v-bind:key="sale['.key']">
       <button class="redBtn" @click="removeSale(sale['.key'])">Remove</button>
+
       <div class="userData">
         <div class="line"></div>
-        <div class="line date">Fecha : {{sale[0].date}}</div>
-        <div class="line name">Nombre : {{sale[0].name}}</div>
-        <div class="line address">Direccion : {{sale[0].address}}</div>
-        <div class="line phone">Cel : {{sale[0].phone}}</div>
-        <div class="line email">Correo : {{sale[0].email}}</div>
-        <div class="line total">Total : {{sale[0].total}}</div>
+        <div class="line date">
+          <div class="lineTitle">Fecha :</div>
+          <input
+            type="text"
+            v-model="sale[0].date"
+            @change="updateUserInfo($event, sale['.key'], '0/date')"
+          />
+        </div>
+
+        <div class="line name">
+          <div class="lineTitle">Nombre :</div>
+          <input
+            type="text"
+            v-model="sale[0].name"
+            @change="updateUserInfo($event, sale['.key'], '0/name')"
+          />
+        </div>
+
+        <div class="line address">
+          <div class="lineTitle">Direccion :</div>
+          <input
+            type="text"
+            v-model="sale[0].address"
+            @change="updateUserInfo($event, sale['.key'], '0/address')"
+          />
+        </div>
+
+        <div class="line phone">
+          <div class="lineTitle">Cel :</div>
+          <input
+            type="text"
+            v-model="sale[0].phone"
+            @change="updateUserInfo($event, sale['.key'], '0/phone')"
+          />
+        </div>
+
+        <div class="line email">
+          <div class="lineTitle">Correo :</div>
+          <input
+            type="text"
+            v-model="sale[0].email"
+            @change="updateUserInfo($event, sale['.key'], '0/email')"
+          />
+        </div>
+
+        <div class="line total">
+          <div class="lineTitle">Total :</div>
+          <input
+            type="text"
+            v-model="sale[0].total"
+            @change="updateUserInfo($event, sale['.key'], '0/total')"
+          />
+        </div>
+        <div class="line pago">
+          <div class="lineTitle">Pago :</div>
+          <select
+            v-model="sale[0].pago"
+            @change="updateUserInfo($event, sale['.key'], '0/pago')"
+            class="selectPayment"
+          >
+            <option value="Todavia no">todavia nop</option>
+            <option value="MercadoPago">MercadoPago</option>
+            <option value="Efectivo">Efectivo</option>
+          </select>
+        </div>
+
         <div class="line"></div>
         <div class="items">
-          <div class="item" v-for="item  in sale[0].items" v-bind:key="item">
+          <div class="item" v-for="(item, index) in sale[0].items" v-bind:key="index">
             <div class="row name">{{item.variedad}}</div>
-            <div class="row amount">Cantidad : {{item.cantidad}}</div>
-            <div class="row payment">Pago : {{item.pago}}</div>
-            <div class="row price">Precio : {{item.precio}}</div>
+            <div class="row amount">
+              Cantidad :
+              <input
+                type="text"
+                v-model="item.cantidad"
+                @change="updateItems($event, sale['.key'], index, 'cantidad', item, sale[0])"
+              />
+            </div>
+            <div class="row payment">
+              Pago :
+              <input
+                type="text"
+                v-model="item.pago"
+                @change="updateItems($event, sale['.key'], index, 'pago', item, sale[0])"
+              />
+            </div>
+            <div class="row price">
+              Precio :
+              <input
+                type="text"
+                v-model="item.precio"
+                @change="updateItems($event, sale['.key'], index, 'precio', item, sale[0])"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -42,7 +125,8 @@ export default {
   data() {
     return {
       sales: [],
-      count: []
+      totalSales: 0,
+      pago: ""
     };
   },
   firebase: {
@@ -50,40 +134,31 @@ export default {
   },
   mixins: [Vue2Filters.mixin],
   methods: {
-    submitProduct() {
-      salesRef.push({
-        name: this.name,
-        edit: false,
-        image: this.image,
-        type: this.type,
-        price: this.price,
-        active: this.active,
-        amount: 0
-      });
-      this.name = "";
-      this.image = "";
-      this.type = "";
-      this.price = "";
-      this.active = true;
-    },
     removeSale(key) {
       salesRef.child(key).remove();
     },
-    setEditName(key) {
-      salesRef.child(key).update({ edit: true });
+    updateUserInfo(event, key, name) {
+      var updateObject = {
+        [name]: event.target.value
+      };
+      salesRef.child(key).update(updateObject);
     },
-    cancelEdit(key) {
-      salesRef.child(key).update({ edit: false });
-    },
-    saveEdit(product) {
-      const key = product[".key"];
-      salesRef.child(key).set({
-        name: product.name,
-        edit: false,
-        image: product.image,
-        type: product.type,
-        price: product.price
-      });
+    updateItems(event, key, index, name, item, sale) {
+      var n = "0/items/" + index + "/" + name;
+      var p = "0/items/" + index + "/pago"
+      if (name == "cantidad"){
+        item.pago = item.precio * item.cantidad;
+      }
+      var saleTotal = 0;
+      for (var i in sale.items){
+        saleTotal += parseInt(sale.items[i].pago)
+      } 
+      let updateObject = {
+        "0/total": saleTotal,
+        [p]: item.pago,
+        [n]: event.target.value
+      };
+      salesRef.child(key).update(updateObject);
     }
   },
   computed: {
@@ -95,10 +170,11 @@ export default {
         var items = s[i][0].items;
         for (var o in items) {
           var name = items[o].variedad.toString();
+          self.totalSales += parseInt(items[o].pago);
           if (!c[name]) {
             c[name] = 0;
           }
-          c[name] += items[o].cantidad;
+          c[name] += parseInt(items[o].cantidad);
         }
       }
       var n = [];
@@ -140,6 +216,8 @@ export default {
   color: #333;
   font-weight: bold;
 }
+.line .lineTitle {
+}
 .sale .userData .items {
   display: flex;
   flex-direction: column;
@@ -165,6 +243,9 @@ export default {
 }
 .sale .userData .items .item .row.price {
   width: 100px;
+}
+
+.sale .selectPayment {
 }
 
 .greenBtn {
@@ -198,5 +279,17 @@ export default {
 .count .row .name {
   width: 180px;
   text-align: left;
+}
+
+#portal input {
+  padding: 5px;
+  border: none;
+  background-color: #f1f1f1;
+  margin-right: 2px;
+  width: 200px;
+}
+
+#portal .item input {
+  max-width: 70px;
 }
 </style>
