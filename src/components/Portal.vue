@@ -166,6 +166,7 @@ export default {
       var self = this;
       var s = self.sales;
       var c = {};
+      self.totalSales = 0;
       for (var i in s) {
         var items = s[i][0].items;
         for (var o in items) {
