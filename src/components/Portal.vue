@@ -237,7 +237,7 @@ export default {
   min-height: 150px;
   flex-wrap: wrap;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: flex-start;
   align-content: flex-start;
   margin-top: 40px;
