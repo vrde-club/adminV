@@ -117,6 +117,7 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .sale {
   margin-bottom: 10px;
@@ -140,6 +141,39 @@ export default {
   color: #333;
   font-weight: bold;
 }
+.line {
+  padding: 4px;
+  width: 300px;
+  text-align: left;
+  padding-left: 10px;
+  color: #333;
+  font-weight: 700;
+  display: flex;
+  justify-content: flex-start;
+}
+.line .lineTitle {
+  position: relative;
+  top: 6px;
+  width: 70px;
+}
+
+.count {
+  min-height: 150px;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: flex-start;
+  margin-top: 40px;
+}
+.count .row {
+  display: flex;
+  border-bottom: 0.5px solid #e2e2e2;
+  max-width: 180px;
+  width: 130px;
+  height: 16px;
+  margin-right: 30px;
+}
 .sale .userData .items {
   display: flex;
   flex-direction: column;
@@ -155,7 +189,10 @@ export default {
 }
 
 .sale .userData .items .item .row.name {
-  width: 200px;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .sale .userData .items .item .row.amount {
   width: 100px;
@@ -185,18 +222,27 @@ export default {
   top: 10px;
 }
 
-.count {
-}
 .count .row {
   display: flex;
   border-bottom: 0.5px solid #e2e2e2;
   max-width: 180px;
   margin-bottom: 7px;
 }
-.count .row .amount {
-}
 .count .row .name {
   width: 180px;
   text-align: left;
 }
+
+#portal input {
+  padding: 5px;
+  border: none;
+  background-color: #f1f1f1;
+  margin-right: 2px;
+  width: 200px;
+}
+
+#portal .item input {
+  max-width: 70px;
+}
 </style>
+
