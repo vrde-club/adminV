@@ -2,7 +2,7 @@
   <div id="app">
     <div class="menu">
       <router-link to="/admin">Admin</router-link>
-      <router-link to="/portal">Portal</router-link>
+      <router-link to="/ventas">Ventas</router-link>
     </div>
     <router-view></router-view>
   </div>

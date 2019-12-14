@@ -2,7 +2,7 @@ import './firebase'
 import Vue from 'vue'
 import App from './App.vue'
 import Admin from './components/Admin'
-import Portal from './components/Portal'
+import Ventas from './components/Ventas'
 import VueRouter from 'vue-router'
 import Vue2Filters from 'vue2-filters'
 import { rtdbPlugin } from 'vuefire'
@@ -14,7 +14,7 @@ Vue.use(rtdbPlugin)
 
 const routes = [
   { path: '/admin', component: Admin },
-  { path: '/portal', component: Portal },
+  { path: '/ventas', component: Ventas },
   { path: '/', component: Admin },
 ]
 

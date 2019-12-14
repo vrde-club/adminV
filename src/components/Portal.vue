@@ -1,8 +1,10 @@
 <template>
   <div id="portal">
     <h1>Ventas</h1>
-    <h1>Total : ${{totalSales}}</h1>
     <div class="count">
+      <h1>Total : ${{totalSales}}</h1>
+      <br />
+      <br />
       <div class="row" v-for="item in salesTotalCount" v-bind:key="item['.key']">
         <div class="name">{{item.name}}</div>
         <div class="amount">{{item.amount}}</div>
