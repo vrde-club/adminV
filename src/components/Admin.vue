@@ -1,6 +1,6 @@
 <template>
   <div id="admin">
-    <h3>Vrde Admin</h3>
+    <h3>Admin</h3>
     <div class="addProduct">
       <div class="productBox">
         <label for="name">Name</label>
@@ -90,6 +90,7 @@
 <script>
 import { db } from "../firebase";
 import Vue2Filters from "vue2-filters";
+
 const productsRef = db.ref("products");
 
 export default {
